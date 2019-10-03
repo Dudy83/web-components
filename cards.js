@@ -2,7 +2,7 @@
 // You will need : fontAwesome and Bootstrap CDN;
 // change template const to change the picture, text etc...
 
-const template = `
+const cardsTemplate = `
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Asap&display=swap');
@@ -101,6 +101,65 @@ body
     transform: scale(1.1);
     cursor: pointer;
 }
+
+@media (max-width: 1080px)
+{
+    .cards
+    {
+        width: 75%;
+        margin: 0;
+        margin-left: 9%;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        min-width: 75%;
+    }
+
+    .background-cards-hover
+    {
+        transform: scale(1.055);
+        transform-origin: right bottom;
+        transition-duration: 0.6s;
+        transition-property: transform;
+    }
+}
+
+@media (max-width: 650px)
+{
+    .background-cards-hover
+    {
+        transform: scale(1.065);
+        transform-origin: right bottom;
+        transition-duration: 0.6s;
+        transition-property: transform;
+    }
+}
+
+@media (max-width: 500px)
+{
+    .background-cards-hover
+    {
+        transform: scale(1.075);
+        transform-origin: right bottom;
+        transition-duration: 0.6s;
+        transition-property: transform;
+    }
+}
+
+@media (max-width: 400px)
+{
+    .cards
+    {
+        margin-left: 11%;
+    }
+
+    .background-cards-hover
+    {
+        transform: scale(1.09);
+        transform-origin: right bottom;
+        transition-duration: 0.6s;
+        transition-property: transform;
+    }
+}
 </style>
 
 <div class="cards-container">
@@ -160,9 +219,9 @@ body
 </div>
 `
 
-const cardsComponent = document.createElement('template');
+const cardsComponent = document.createElement('cardsTemplate');
 
-cardsComponent.innerHTML = template;
+cardsComponent.innerHTML = cardsTemplate;
 
 class Cards extends HTMLElement {
 
@@ -170,7 +229,7 @@ class Cards extends HTMLElement {
     {
         super();
         
-        this.innerHTML = template;
+        this.innerHTML = cardsTemplate;
 
     }
 
