@@ -1,9 +1,17 @@
-// template name : <cards-component></cards-component>
-// You will need : fontAwesome and Bootstrap CDN;
-// change template const to change the picture, text etc...
+//  template : <card-component imgSrc="#" >
+//                      <p slot="content">
+//                          Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+//                      </p>
+//                  <ul slot="actions">
+//                      <li text="Some action" value=1></li>
+//                      <li text="Some action2" value=2></li>
+//                      <li text="Some action3" value=3></li>
+//                  </ul>
+//              </card-component>
 
-const cardsTemplate = `
-
+const cardTemplateHtml = `
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css?family=Asap&display=swap');
 
@@ -21,6 +29,7 @@ body
     justify-content: space-around;
     flex-wrap: wrap;
 }
+
 .cards
 {
     position: relative;
@@ -86,17 +95,18 @@ body
     justify-content: space-between;
 }
 
-.cards-content p{
+p{
     width: 90%;
     padding-top: 0.4rem;
+    font-family: 'Arial';
 }
 
-.cards-content i{
+.fas{
     color: rgb(209, 206, 206);
     font-size: 200%;
 }
 
-.cards-content i:hover
+.fas:hover
 {
     transform: scale(1.1);
     cursor: pointer;
@@ -162,98 +172,91 @@ body
 }
 </style>
 
-<div class="cards-container">
-        <div class="cards">
-                <div class="card-img-container">
-                    <img src="http://ssl.quiksilver.com/static/QS/default/category-assets/marketing-landing/landing/img/surf/tiles/surf_featured_1.jpg" alt="cards image background">
-                </div>
-                <div class="cards-content">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa laudantium deserunt voluptatem nihil nulla dolorem quam magni officiis eum soluta quia nobis excepturi labore repellendus voluptas sint odio, inventore accusantium.</p>
-                    <i class="fas fa-ellipsis-h" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-    
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-                        <button class="dropdown-item" type="button">Action</button>
-                        <button class="dropdown-item" type="button">Another action</button>
-                        <button class="dropdown-item" type="button">Something else here</button>
-                    </div>
-                </div>
-        
-            <div class="background-cards"></div>
+<div class="cards">
+        <div class="card-img-container">
+            <img alt="cards image background">
+        </div>
+        <div class="cards-content">
+            <p><slot name="content"></slot></p>
+            <slot name="dropdown"></slot>
         </div>
 
-        <div class="cards">
-            <div class="card-img-container">
-                <img src="http://ssl.quiksilver.com/static/QS/default/category-assets/marketing-landing/landing/img/surf/tiles/surf_featured_1.jpg" alt="cards image background">
-            </div>
-            <div class="cards-content">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa laudantium deserunt voluptatem nihil nulla dolorem quam magni officiis eum soluta quia nobis excepturi labore repellendus voluptas sint odio, inventore accusantium.</p>
-                <i class="fas fa-ellipsis-h" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-                    <button class="dropdown-item" type="button">Action</button>
-                    <button class="dropdown-item" type="button">Another action</button>
-                    <button class="dropdown-item" type="button">Something else here</button>
-                </div>
-            </div>
-    
-            <div class="background-cards"></div>
-        </div>
-
-        <div class="cards">
-            <div class="card-img-container">
-                <img src="http://ssl.quiksilver.com/static/QS/default/category-assets/marketing-landing/landing/img/surf/tiles/surf_featured_1.jpg" alt="cards image background">
-            </div>
-            <div class="cards-content">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa laudantium deserunt voluptatem nihil nulla dolorem quam magni officiis eum soluta quia nobis excepturi labore repellendus voluptas sint odio, inventore accusantium.</p>
-                <i class="fas fa-ellipsis-h" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-                    <button class="dropdown-item" type="button">Action</button>
-                    <button class="dropdown-item" type="button">Another action</button>
-                    <button class="dropdown-item" type="button">Something else here</button>
-                </div>
-            </div>
-
-            <div class="background-cards"></div>
-        </div>
+    <div class="background-cards"></div>
 </div>
-`
+`;
 
-const cardsComponent = document.createElement('cardsTemplate');
+const cardTemplate = document.createElement('template');
+cardTemplate.innerHTML = cardTemplateHtml;
 
-cardsComponent.innerHTML = cardsTemplate;
-
-class Cards extends HTMLElement {
-
+class Card extends HTMLElement {
     constructor()
     {
         super();
-        
-        this.innerHTML = cardsTemplate;
 
+        this.attachShadow({mode: 'open'})
+            .appendChild(cardTemplate.content.cloneNode(true));
     }
 
     connectedCallback()
     {
-        let $cards = document.querySelectorAll('.cards');
+        let $card = this.shadowRoot.querySelector('.cards');
 
-        $cards.forEach(($card) => {
-        // Set event listener for mouseover
-        $card.addEventListener('mouseover', () => {
-                $card.querySelector('.background-cards').setAttribute("class", "background-cards background-cards-hover");
+        // Set event listener for mouseenter
+        $card.addEventListener('mouseenter', () => {
+            this.shadowRoot.querySelector('.background-cards')
+                .setAttribute("class", "background-cards background-cards-hover");
         });
     
-        // Set event listener for mouseout
-        $card.addEventListener('mouseout', () => {
-                $card.querySelector('.background-cards').setAttribute("class", "background-cards background-cards-out");
-            });  
+        // Set event listener for mouseleave
+        $card.addEventListener('mouseleave', () => {
+            this.shadowRoot.querySelector('.background-cards')
+                .setAttribute("class", "background-cards background-cards-out");
         });
+
+        // Define img url
+        $card.querySelector('img').src = this.getAttribute('imgSrc');
+
+        // Populate actions
+        try
+        {
+            this.insertAdjacentHTML("beforeend", `
+            <section slot="dropdown">
+                <i class="fas fa-ellipsis-h" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                <div id="actionsContainer" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+                </div>
+            </section>`);
+            let $actionsContainer = this.querySelector('#actionsContainer');
+            let actions = Array.from(Array.from(this.children).filter(el => el.slot === "actions")[0].children)
+                .map(el => {
+                    return {
+                        text: el.getAttribute('text'),
+                        value: el.getAttribute('value')
+                    }
+                });
+
+            // Generate buttons for each options
+            actions.forEach(action => $actionsContainer
+                .insertAdjacentHTML("beforeend", `<button class="dropdown-item" type="button" value=${action.value}>${action.text}</button>`));
+            // Set event listener for all the buttons
+            $actionsContainer.addEventListener('click', evt =>
+            {
+                if (evt.target.tagName != "BUTTON")
+                    return;
+                let evtData = {text: evt.target.innerText, value: evt.target.getAttribute('value')};
+                this.dispatchEvent(new CustomEvent('action', { detail: evtData }));
+            });
+        }
+        catch (err)
+        {
+            // No big deal if it throw an exception here
+        }
+
     }
 
     static Register()
     {
-        customElements.define('cards-component', Cards);
+        customElements.define('card-component', Card);
     }
 }
 
-Cards.Register();
+Card.Register();

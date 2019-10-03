@@ -236,7 +236,6 @@ class Sidenav extends HTMLElement {
         let $hamburger = document.getElementById('nav-icon3');
         let $dropdownContent = document.getElementById('dropdown-content');
         
-        
         $navLeaver.addEventListener('click', () => {
             $dropdown.setAttribute('class', 'dropdown-not-loaded');
             $dropdownContent.style.visibility = "hidden";
