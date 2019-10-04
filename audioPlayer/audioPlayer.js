@@ -1,3 +1,6 @@
+// component name : <audio-player></audio-player>
+// use attributes : songSrc, songTitle, songAuthor, songImg in the component to load your song;
+
 const audioPlayerTemplateHtml = `
 
 <style>
@@ -265,9 +268,9 @@ input[type=range]::-moz-range-thumb {
         <div class="player">
             
             <div class="controllers">
-                <img src="./audioPlayer/images/previous.png" alt="previous-track" width="15px" onclick="previous();">
+                <img id="previous" src="./audioPlayer/images/previous.png" alt="previous-track" width="15px">
                 <img id="play-pause" src="./audioPlayer/images/play.png" alt="play-track" width="40px">
-                <img src="./audioPlayer/images/next.png" alt="next-track" width="15px" onclick="next();">
+                <img id="next" src="./audioPlayer/images/next.png" alt="next-track" width="15px">
             </div>
 
             <div id="audio-player-time">
@@ -309,8 +312,10 @@ class AudioPlayer extends HTMLElement {
         this.speaker = this.shadowRoot.getElementById('speaker-volume');
         this.volumeProgress = this.shadowRoot.getElementById('progressVolume');
         this.audio = this.shadowRoot.querySelector('#audio-container');
-        this.progressBarVolume = document.getElementById('songVolume');
+        this.previousSong = this.shadowRoot.getElementById('previous');
+        this.nextSong = this.shadowRoot.getElementById('next');
         this.a = this.volumeSlider.value;
+        
 
         this.song = new Audio();
         console.log(this.song);
@@ -340,6 +345,8 @@ class AudioPlayer extends HTMLElement {
         this.speaker.addEventListener('scroll', this.adjustVolume.bind(this));
         this.volumeSlider.addEventListener('change', this.adjustVolume.bind(this));
         this.volumeSlider.addEventListener('mousemove', this.updateProgressBarVolume.bind(this));
+        this.previousSong.addEventListener('click', this.previous.bind(this));
+        this.nextSong.addEventListener('click', this.next.bind(this));
         this.songSlider.addEventListener('change', this.seekSong.bind(this));
     }
 
@@ -348,7 +355,6 @@ class AudioPlayer extends HTMLElement {
         if(this.currentSong >= this.songs.length)
             this.currentSong = 0;
         this.song.src = this.getAttribute('songSrc');
-        console.log(this.song.src)
         this.songTitle.textContent =  this.getAttribute('songTitle');
         this.songAuthor.textContent = this.getAttribute('songAuthor');
         this.songImage.src = this.getAttribute('songImg'); 
@@ -402,17 +408,21 @@ class AudioPlayer extends HTMLElement {
 
     next()
     {
-        this.currentSong++;
-        this.currentSong = (this.currentSong < 0) ? this.songs.length +1 : this.currentSong;
-        this.playPause.src = "images/pause.png";
+        this.song.src = this.getAttribute('songSrc');
+        this.songTitle.textContent =  this.getAttribute('songTitle');
+        this.songAuthor.textContent = this.getAttribute('songAuthor');
+        this.songImage.src = this.getAttribute('songImg'); 
+        this.playPause.src = "./audioPlayer/images/pause.png";
         this.loadSong();    
     }
 
     previous()
     {
-        this.currentSong--;
-        this.currentSong = (currentSong < 0) ? songs.length -1 : currentSong;
-        this.playPause.src = "images/pause.png";
+      this.song.src = this.getAttribute('songSrc');
+      this.songTitle.textContent =  this.getAttribute('songTitle');
+      this.songAuthor.textContent = this.getAttribute('songAuthor');
+      this.songImage.src = this.getAttribute('songImg'); 
+        this.playPause.src = "./audioPlayer/images/pause.png";
         this.loadSong();
     }
 
