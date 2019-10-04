@@ -310,6 +310,7 @@ class AudioPlayer extends HTMLElement {
         this.volumeProgress = this.shadowRoot.getElementById('progressVolume');
         this.audio = this.shadowRoot.querySelector('#audio-container');
         this.progressBarVolume = document.getElementById('songVolume');
+        this.a = this.volumeSlider.value;
 
         this.song = new Audio();
         console.log(this.song);
@@ -332,14 +333,14 @@ class AudioPlayer extends HTMLElement {
     connectedCallback()
     {
         this.loadSong();
-        setInterval(this.updateSongSlider, 1000);
+        setInterval(this.updateSongSlider.bind(this), 1000);
         this.updateSongSlider();
-        this.playPause.addEventListener('click', this.playOrPauseSong);
-        this.speaker.addEventListener('click', this.clickMuted);
-        this.speaker.addEventListener('scroll', this.adjustVolume);
-        this.volumeSlider.addEventListener('change', this.adjustVolume);
-        this.progressBarVolume.addEventListener('mousemove', this.updateProgressBarVolume);
-        this.songSlider.addEventListener('change', this.seekSong);
+        this.playPause.addEventListener('click', this.playOrPauseSong.bind(this));
+        this.speaker.addEventListener('click', this.clickMuted.bind(this));
+        this.speaker.addEventListener('scroll', this.adjustVolume.bind(this));
+        this.volumeSlider.addEventListener('change', this.adjustVolume.bind(this));
+        this.volumeSlider.addEventListener('mousemove', this.updateProgressBarVolume.bind(this));
+        this.songSlider.addEventListener('change', this.seekSong.bind(this));
     }
 
     loadSong()
@@ -348,13 +349,12 @@ class AudioPlayer extends HTMLElement {
             this.currentSong = 0;
         this.song.src = this.getAttribute('songSrc');
         console.log(this.song.src)
-        this.songTitle.textContent =  this.songs[this.currentSong].beat.replace(".mp3", "");
-        this.songAuthor.textContent = this.songs[this.currentSong].author;
-        this.songImage.src = "./audioPlayer/images/" + this.songs[this.currentSong].img;
+        this.songTitle.textContent =  this.getAttribute('songTitle');
+        this.songAuthor.textContent = this.getAttribute('songAuthor');
+        this.songImage.src = this.getAttribute('songImg'); 
         this.song.volume = this.volumeSlider.value;
         this.song.play();
-        console.log(this.song.currentTime)
-        setTimeout(this.showDuration, 1000);
+        setTimeout(this.showDuration.bind(this), 1000);
     }
 
     updateSongSlider()
@@ -391,7 +391,6 @@ class AudioPlayer extends HTMLElement {
 
     playOrPauseSong()
     {
-        console.log(this.song)
         if(this.song.paused){
             this.song.play();
             this.playPause.src = "./audioPlayer/images/pause.png"; 
@@ -420,7 +419,7 @@ class AudioPlayer extends HTMLElement {
     seekSong()
     {
         this.song.currentTime = this.songSlider.value;
-        this.currentTime.textContent = this.convertTime(song.currentTime);
+        this.currentTime.textContent = this.convertTime(this.song.currentTime);
     }
 
     adjustVolume()
@@ -437,26 +436,25 @@ class AudioPlayer extends HTMLElement {
 
     clickMuted()
     {
-        let a = this.volumeSlider.value;
-        
-        if(volumeSlider.value >= 0.01)
+
+        if(this.volumeSlider.value >= 0.01)
         {
-            volumeSlider.value = 0;
-            song.volume = 0;
-            speaker.src = "./audioPlayer/images/muted.png";
-            progressBarVolume.style.backgroundImage = 
+            this.volumeSlider.value = 0;
+            this.song.volume = 0;
+            this.speaker.src = "./audioPlayer/images/muted.png";
+            this.volumeSlider.style.backgroundImage = 
             '-webkit-gradient(linear, left top, right top, ' +
             'color-stop(' + 0 + '%, #d45445), ' +
             'color-stop(' + 0 + '%, #8a7f7f)' +
             ')'
         }
 
-        else if(volumeSlider.value <= 0)
+        else if(this.volumeSlider.value <= 0)
         {
-            volumeSlider.value = a;
-            song.volume = a;
-            speaker.src = "./audioPlayer/images/volume.png";
-            progressBarVolume.style.backgroundImage = 
+          this.volumeSlider.value = this.a;
+          this.song.volume =  this.a;
+          this.speaker.src = "./audioPlayer/images/volume.png";
+          this.volumeSlider.style.backgroundImage = 
             '-webkit-gradient(linear, left top, right top, ' +
             'color-stop(' + 50 + '%, #d45445), ' +
             'color-stop(' + 50 + '%, #8a7f7f)' +
@@ -466,9 +464,9 @@ class AudioPlayer extends HTMLElement {
 
     updateProgressBarVolume()
     {
-        var val = ((progressBarVolume.value - progressBarVolume.min) / (progressBarVolume.max - progressBarVolume.min));
+        var val = ((this.volumeSlider.value - this.volumeSlider.min) / (this.volumeSlider.max - this.volumeSlider.min));
         var percent = val * 100;
-        progressBarVolume.style.backgroundImage = 
+        this.volumeSlider.style.backgroundImage = 
         '-webkit-gradient(linear, left top, right top, ' +
         'color-stop(' + percent + '%, #d45445), ' +
         'color-stop(' + percent + '%, #8a7f7f)' +
