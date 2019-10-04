@@ -203,7 +203,7 @@ const sideNavTemplate = `
     <i id="nav-dropdown-leaver" class="fas fa-chevron-left d-flex justify-content-center align-items-center"></i>
                     
     <div class="d-flex flex-column justify-content-center align-items-center border-bottom">
-        <img src="https://w9corrections.com/wp-content/uploads/2018/07/logo-placeholder@2x.png" width="64px" alt="website image brand">
+        <img id="brand-logo" width="64px" alt="website image brand">
         <h1 id="dropdown-brand"> Your Title </h1>
     </div>
                     
@@ -235,7 +235,12 @@ class Sidenav extends HTMLElement {
         let $dropdown = document.getElementById('nav-dropdown');
         let $hamburger = document.getElementById('nav-icon3');
         let $dropdownContent = document.getElementById('dropdown-content');
-        
+        let $brand = document.getElementById('dropdown-brand');
+        let $logo = document.getElementById('brand-logo');
+
+        $brand.textContent = this.getAttribute('brand'),
+        $logo.src = this.getAttribute('logo');
+
         $navLeaver.addEventListener('click', () => {
             $dropdown.setAttribute('class', 'dropdown-not-loaded');
             $dropdownContent.style.visibility = "hidden";

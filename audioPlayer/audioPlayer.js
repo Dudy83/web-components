@@ -269,7 +269,7 @@ input[type=range]::-moz-range-thumb {
             
             <div class="controllers">
                 <img id="previous" src="./audioPlayer/images/previous.png" alt="previous-track" width="15px">
-                <img id="play-pause" src="./audioPlayer/images/play.png" alt="play-track" width="40px">
+                <img id="play-pause" src="./audioPlayer/images/pause.png" alt="play-track" width="40px">
                 <img id="next" src="./audioPlayer/images/next.png" alt="next-track" width="15px">
             </div>
 
@@ -318,7 +318,6 @@ class AudioPlayer extends HTMLElement {
         
 
         this.song = new Audio();
-        console.log(this.song);
         this.currentSong = 0;
 
         this.songs = [
