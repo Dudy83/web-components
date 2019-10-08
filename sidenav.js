@@ -1,10 +1,14 @@
-// template name : <sidenav-component></sidenav-component>
+// template : <sidenav-component logo="#url">
+//              <h1 slot="brandTitle">different text!</h1>
+//            </sidenav-component>
 // You will need : fontAwesome and Bootstrap CDN;
-// change template const to change the pictures, text etc...
+
 
 const sideNavTemplate = `
-
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <style>
+
 @import url('https://fonts.googleapis.com/css?family=Righteous&display=swap');
 
 #dropdown-brand
@@ -117,6 +121,7 @@ const sideNavTemplate = `
 {
     color: #535353;
     opacity: 0.5; 
+    cursor: pointer;
 }
 
 #nav-dropdown-leaver
@@ -129,11 +134,13 @@ const sideNavTemplate = `
     border-radius: 100%;
 }
 
-#nav-dropdown-leaver:hover{
+#nav-dropdown-leaver:hover
+{
     background: #a8a8a8;
     opacity: 0.8;
     color: #fff;
 }
+
 
 .dropdown-loaded
 {
@@ -204,19 +211,18 @@ const sideNavTemplate = `
                     
     <div class="d-flex flex-column justify-content-center align-items-center border-bottom">
         <img id="brand-logo" width="64px" alt="website image brand">
-        <h1 id="dropdown-brand"> Your Title </h1>
+        <p><slot name="brandTitle">My default text</slot></p>
     </div>
                     
     <div id="dropdown-content" class="d-flex flex-column justify-content-center align-items-start border-bottom mt-3">
         <a class="dropdown-items ml-1"><i class="fas fa-cog mr-3"></i> Paramètres</a>
         <a class="dropdown-items ml-1"><i class="fas fa-user mr-3 mt-4"></i> Mon compte</a>
         <a class="dropdown-items"><i class="fas fa-anchor mr-3 mt-4"></i> Les cartes</a>
-    </div>
-                    
+    </div>             
 </div>
 `
 
-const sidenavComponent = document.createElement('sideNavTemplate');
+const sidenavComponent = document.createElement('template');
 
 sidenavComponent.innerHTML = sideNavTemplate;
 
@@ -226,19 +232,19 @@ class Sidenav extends HTMLElement {
     {
         super();
         
-        this.innerHTML = sideNavTemplate;
+        this.attachShadow({mode: 'open'})
+        .appendChild(sidenavComponent.content.cloneNode(true));
     }
 
     connectedCallback()
     {
-        let $navLeaver = document.getElementById('nav-dropdown-leaver');
-        let $dropdown = document.getElementById('nav-dropdown');
-        let $hamburger = document.getElementById('nav-icon3');
-        let $dropdownContent = document.getElementById('dropdown-content');
-        let $brand = document.getElementById('dropdown-brand');
-        let $logo = document.getElementById('brand-logo');
+        let $navLeaver = this.shadowRoot.getElementById('nav-dropdown-leaver');
+        let $dropdown = this.shadowRoot.getElementById('nav-dropdown');
+        let $hamburger = this.shadowRoot.getElementById('nav-icon3');
+        let $dropdownContent = this.shadowRoot.getElementById('dropdown-content');
+        let $logo = this.shadowRoot.getElementById('brand-logo');
 
-        $brand.textContent = this.getAttribute('brand'),
+        
         $logo.src = this.getAttribute('logo');
 
         $navLeaver.addEventListener('click', () => {
@@ -253,6 +259,18 @@ class Sidenav extends HTMLElement {
             $dropdown.setAttribute('class', 'dropdown-loaded');
             $dropdownContent.style.visibility = "visible";
         });
+
+    
+            // let actions = Array.from(Array.from(this.children).filter(el => el.slot === "actions")[0].children)
+            //     .map(el => {
+            //         return {
+            //             text: el.getAttribute('text'),
+            //             value: el.getAttribute('value')
+            //         }
+            //     });
+
+            // actions.forEach(action => $actionsContainer
+            //     .insertAdjacentHTML("beforeend", `<button class="dropdown-item" type="button" value=${action.value}>${action.text}</button>`));
     }
 
     static Register()

@@ -10,11 +10,12 @@
 </head>
 <body>
 
-    <sidenav-component brand="test" logo="https://w9corrections.com/wp-content/uploads/2018/07/logo-placeholder@2x.png">      
+    <sidenav-component logo="https://w9corrections.com/wp-content/uploads/2018/07/logo-placeholder@2x.png">    
+        <h1 slot="brandTitle">different text!</h1>
     </sidenav-component>
 
     <main style="margin-left: 50px" class="d-flex flex-wrap justify-content-center align-items-center">
-            <card-component imgSrc="http://ssl.quiksilver.com/static/QS/default/category-assets/marketing-landing/landing/img/surf/tiles/surf_featured_1.jpg" >
+            <card-component href="www.google.fr" imgSrc="http://ssl.quiksilver.com/static/QS/default/category-assets/marketing-landing/landing/img/surf/tiles/surf_featured_1.jpg" >
                 <p slot="content">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa laudantium deserunt voluptatem nihil nulla dolorem quam magni officiis eum soluta quia nobis excepturi labore repellendus voluptas sint odio, inventore accusantium.
                 </p>
@@ -23,8 +24,10 @@
                     <li text="Some action2" value=2></li>
                     <li text="Some action3" value=3></li>
                 </ul>
+                
             </card-component>
     </main>
+
     <audio-player songSrc="./audioPlayer/beats/10550.mp3" songTitle="mon titre" songAuthor="Author1" songImg="./audioPlayer/images/Elvis.jpg"></audio-player>
     
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -33,5 +36,6 @@
     <script src="cards.js"></script>
     <script src="sidenav.js"></script>
     <script src="audioPlayer/audioPlayer.js"></script>
+
 </body>
 </html>

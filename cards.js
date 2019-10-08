@@ -12,8 +12,9 @@
 const cardTemplateHtml = `
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap&display=swap">
 <style>
-@import url('https://fonts.googleapis.com/css?family=Asap&display=swap');
+
 
 body
 {
@@ -98,7 +99,7 @@ body
 p{
     width: 90%;
     padding-top: 0.4rem;
-    font-family: 'Arial';
+    font-family: 'Asap';
 }
 
 .fas{
@@ -106,10 +107,9 @@ p{
     font-size: 200%;
 }
 
-.fas:hover
+#dropdownMenu2:hover
 {
     transform: scale(1.1);
-    cursor: pointer;
 }
 
 @media (max-width: 1080px)
@@ -250,6 +250,12 @@ class Card extends HTMLElement {
         {
             // No big deal if it throw an exception here
         }
+        // Must add fonts from google out of the Shadow DOM !
+        let linkNode = document.createElement("link"); 
+        linkNode.type = "text/css"; 
+        linkNode.rel = "stylesheet"; 
+        linkNode.href = "//fonts.googleapis.com/css?family=Asap";
+        document.head.appendChild(linkNode);
 
     }
 
